@@ -1,0 +1,60 @@
+
+
+
+.container{
+    background-color: #202020;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+   
+}
+.main-heading {
+    font-size: 2.5rem; /* Adjust font size as needed */
+    color: #fff; /* White text color */
+    text-align: center;
+    margin: 20px 0;
+  
+    /* Modern shadow effect */
+    text-shadow: 3px 3px 5px rgba(0, 0, 0, 0.3), 
+                 0 0 25px rgba(255, 255, 255, 0.2), 
+                 0 0 5px rgba(0, 0, 0, 0.5);
+    
+    /* Optional: Adding some smooth transitions */
+    transition: text-shadow 0.3s ease-in-out;
+  
+    /* Optional: Adding a hover effect */
+    &:hover {
+      text-shadow: 5px 5px 10px rgba(0, 0, 0, 0.5), 
+                   0 0 35px rgba(255, 255, 255, 0.3), 
+                   0 0 10px rgba(0, 0, 0, 0.7);
+    }
+  }
+  
+.buttons-container{
+    height: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #66A182;
+    display: flex;
+    justify-content: space-between;
+    padding: 20px;
+}
+
+.jobs-button{
+    width: 40%;
+}
+
+.bookmarks-button{
+    width: 40%;
+}
+.btn{
+    background-color: #1893d5;
+    padding: 10px 10px 10px 10px;
+    border: none;
+    border-radius: 5px;
+    color: white;
+    font-family: "Roboto";
+    font-size: 18px;
+}

@@ -1,0 +1,53 @@
+.bookmarks-container{
+    background-color: #000000;
+height: fit-content;
+}
+.bookmark-card{
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 15px;
+    background-color: #202020;
+    transition: box-shadow 0.3s;
+    margin-bottom: 20px;
+    margin-right: 10px;
+    margin-left: 10px;
+}
+.link{
+    text-decoration: none;
+}
+.job-title{
+    color: white;
+}
+.details{
+    color: beige;
+    list-style: none;
+}
+.bookmark-heading{
+    color: white;
+    text-align: center;
+}
+.button{
+    background-color: #1893d5;
+    padding: 10px 10px 10px 10px;
+    border: none;
+    border-radius: 5px;
+    color: white;
+    font-size: 12px;
+    margin-top: 20px;
+    flex-direction: row;
+}
+.button1{
+    margin-right: 20px;
+    margin-left: 20px;
+}
+.no-data{
+    color: white;
+    display: flex;
+    justify-content: center;
+    height: 100vh;
+    align-items: center;
+    font-weight: 500;
+    font-size: 20px;
+
+
+}
