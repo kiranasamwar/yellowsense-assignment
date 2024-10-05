@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
-import { Navigate } from 'react-router-dom'; // Import Navigate for redirection
-import './Jobs.css'
+import { Navigate } from 'react-router-dom';
+import TinderCard from 'react-tinder-card'; // Import TinderCard for swipe functionality
+import './Jobs.css';
 
 class Jobs extends Component {
   constructor(props) {
@@ -11,29 +12,18 @@ class Jobs extends Component {
       isLoading: false,
       error: null,
       hasMore: true,
-      jobIds: new Set(), // To keep track of unique job IDs
-      redirectToJob: null, // For redirection to job detail page
-      redirectToBookmarks: false, // For redirection to bookmarks page
+      jobIds: new Set(),
+      redirectToJob: null,
+      redirectToBookmarks: false,
+      swipeAction: null, // State to show swipe action (bookmark/dismiss)
     };
 
-    this.handleScroll = this.handleScroll.bind(this);
+    this.fetchJobs = this.fetchJobs.bind(this);
   }
 
   componentDidMount() {
     this.fetchJobs();
     window.addEventListener('scroll', this.handleScroll);
-  }
-
-  componentDidUpdate(prevProps, prevState) {
-    if (prevState.page !== this.state.page) {
-      this.fetchJobs();
-    }
-    if (prevState.redirectToJob !== this.state.redirectToJob && this.state.redirectToJob) {
-      this.setState({ redirectToJob: null });
-    }
-    if (prevState.redirectToBookmarks !== this.state.redirectToBookmarks && this.state.redirectToBookmarks) {
-      this.setState({ redirectToBookmarks: false });
-    }
   }
 
   componentWillUnmount() {
@@ -54,15 +44,15 @@ class Jobs extends Component {
       if (Array.isArray(data.results)) {
         const newJobs = data.results.filter((job) => {
           if (jobIds.has(job.id)) {
-            return false; // Skip if job ID is already in the Set
+            return false;
           }
-          jobIds.add(job.id); // Add job ID to the Set
+          jobIds.add(job.id);
           return true;
         });
 
         this.setState((prevState) => ({
           jobs: [...prevState.jobs, ...newJobs],
-          hasMore: page < 2, // Stop fetching after page 2
+          hasMore: page < 2,
         }));
       } else {
         throw new Error('Jobs data is not in the expected format');
@@ -75,43 +65,48 @@ class Jobs extends Component {
     }
   };
 
-  handleScroll() {
-    if (
-      window.innerHeight + document.documentElement.scrollTop >=
-        document.documentElement.offsetHeight - 5 &&
-      !this.state.isLoading &&
-      this.state.hasMore
-    ) {
-      this.setState((prevState) => ({ page: prevState.page + 1 }));
-    }
-  }
-
   handleJobClick = (id) => {
     this.setState({ redirectToJob: id });
   };
 
-  bookmark = () => {
-    this.setState({ redirectToBookmarks: true });
+  handleSwipe = (direction, job) => {
+    if (direction === 'right') {
+      this.setState({ swipeAction: 'bookmark' }, () => {
+        setTimeout(() => {
+          this.setState({ swipeAction: null });
+        }, 1000);
+      });
+      this.handleBookmarkClick(job); // Bookmark the job on right swipe
+    } else if (direction === 'left') {
+      this.setState({ swipeAction: 'dismiss' }, () => {
+        setTimeout(() => {
+          this.setState({ swipeAction: null });
+        }, 1000);
+      });
+      this.handleRemoveJob(job); // Remove the job on left swipe
+    }
   };
 
-  handleBookmarkClick = (job, e) => {
-    e.stopPropagation();
+  handleRemoveJob = (job) => {
+    this.setState((prevState) => ({
+      jobs: prevState.jobs.filter((j) => j.id !== job.id),
+    }));
+  };
+
+  handleBookmarkClick = (job) => {
     const bookmarkedJobs = JSON.parse(localStorage.getItem('bookmarkedJobs')) || [];
     const isBookmarked = bookmarkedJobs.some((b) => b.id === job.id);
 
     if (isBookmarked) {
-      alert('Job already bookmarked!');
       return;
     }
 
     bookmarkedJobs.push(job);
     localStorage.setItem('bookmarkedJobs', JSON.stringify(bookmarkedJobs));
-
-    alert('Job bookmarked!');
   };
 
   render() {
-    const { jobs, isLoading, error, hasMore, redirectToJob, redirectToBookmarks } = this.state;
+    const { jobs, isLoading, error, hasMore, redirectToJob, redirectToBookmarks, swipeAction } = this.state;
 
     if (redirectToJob) {
       return <Navigate to={`/job/${redirectToJob}`} />;
@@ -123,53 +118,54 @@ class Jobs extends Component {
 
     return (
       <div className="jobs-container">
-        <button className='bookmark-button btn' onClick={this.bookmark}>Bookmarks Page</button>
-        <h1 className='main-heading-jobs'> JOBS PAGE</h1>
+        <button className='bookmark-button btn3' onClick={() => this.setState({ redirectToBookmarks: true })}>Bookmarks Page</button>
+        <h1 className='main-heading-jobs'>JOBS PAGE</h1>
         {jobs.length > 0 ? (
-          jobs
-            .filter(
-              (job) =>
-                job.title && job.primary_details?.Place && job.primary_details?.Salary
-            ) // Only show jobs with all required details
-            .map((job, index) => (
-              <div
-                key={`${job.id}-${index}`}
-                className="job-card"
-                onClick={() => this.handleJobClick(job.id)}
+          <div className="tinder-cards" id='swiper'>
+            {jobs.map((job) => (
+              <TinderCard
+                key={job.id}
+                onSwipe={(direction) => this.handleSwipe(direction, job)}
+                onCardLeftScreen={() => this.handleRemoveJob(job)} // Ensure job is removed from state after swiping off screen
               >
-                {job.title && <h2 className='job-title'>{job.title}</h2>}
-                {job.primary_details?.Place && (
-                  <p className='details'>
-                    <strong className='details'>Location:</strong> {job.primary_details.Place}
-                  </p>
-                )}
-                {job.primary_details?.Salary && (
-                  <p className='details'>
-                    <strong className='details'>Salary:</strong> {job.primary_details.Salary}
-                  </p>
-                )}
-                {job.whatsapp_no && (
-                  <p className='details'>
-                    <strong className='details'>Phone:</strong> {job.whatsapp_no}
-                  </p>
-                )}
-                {job.company_name && (
-                  <p className='details'>
-                    <strong className='details'>Company:</strong> {job.company_name}
-                  </p>
-                )}
-                <button className='bookmark-button' onClick={(e) => this.handleBookmarkClick(job, e)}>
-                  Bookmark
-                </button>
-              </div>
-            ))
+                <div className="job-card">
+                  {job.title && <h2 className='job-title'>{job.title}</h2>}
+                  {job.primary_details?.Place && (
+                    <p className='details'>
+                      <strong className='details'>Location:</strong> {job.primary_details.Place}
+                    </p>
+                  )}
+                  {job.primary_details?.Salary && (
+                    <p className='details'>
+                      <strong className='details'>Salary:</strong> {job.primary_details.Salary}
+                    </p>
+                  )}
+                  {job.whatsapp_no && (
+                    <p className='details'>
+                      <strong className='details'>Phone:</strong> {job.whatsapp_no}
+                    </p>
+                  )}
+                  {job.company_name && (
+                    <p className='details'>
+                      <strong className='details'>Company:</strong> {job.company_name}
+                    </p>
+                  )}
+                </div>
+              </TinderCard>
+            ))}
+            {/* Show swipe action feedback (bookmark or dismiss) */}
+            <div className='bookamrk-dismiss-action-conatiner'>
+              {swipeAction === 'bookmark' && <div className="swipe-indicator bookmark-indicator">Bookmarked!</div>}
+              {swipeAction === 'dismiss' && <div className="swipe-indicator dismiss-indicator">Dismissed!</div>}
+            </div>
+          </div>
         ) : (
-          <p>No jobs available</p>
+          <p className='no-jobs-available-loading-line'>No jobs available</p>
         )}
 
-        {isLoading && <p>Loading more jobs...</p>}
-        {error && <p>{error}</p>}
-        {!hasMore && !isLoading && <p>No more jobs to load.</p>}
+        {isLoading && <p className='no-jobs-available-loading-line'>Loading more jobs...</p>}
+        {error && <p className='no-jobs-available-loading-line'>{error}</p>}
+        {!hasMore && !isLoading && <p >No more jobs to load.</p>}
       </div>
     );
   }

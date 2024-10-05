@@ -1,40 +1,154 @@
-/* src/components/Jobs/Jobs.css */
-
-.jobs-container{
-  background-color: #000000;
-
+/* General Styles */
+.jobs-container {
+  background-color: #1E1E1E;
+  height: 100vh;
 }
-.job-card{
+
+.no-jobs-available-loading-line {
+  color: aliceblue;
+  height: 70vh;
+  font-size: 20px;
+  align-items: center;
+  justify-content: center;
+  display: flex;
+}
+
+.tinder-cards {
+  background-color: #1893d5;
+  display: flex;
+  justify-content: space-between;
+  flex-direction: column;
+}
+
+.job-card {
+  height: 60vh;
+  position: absolute;
+  object-fit: cover;
+  object-position: 50% 50%;
   border: 1px solid #ccc;
   border-radius: 8px;
-  padding: 15px;
+  padding: 10px;
   background-color: #202020;
-  transition: box-shadow 0.3s;
-  margin-bottom: 10px;
-  margin-right: 10px;
-  margin-left: 10px;
+  margin: 10px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  touch-action: pan-x;
 }
-.main-heading-jobs{
+
+.job-card.swiping-left {
+  transform: translateX(-100%) rotate(-10deg);
+  opacity: 0;
+}
+
+.main-heading-jobs {
   color: white;
   text-align: center;
+  font-size: 26px;
 }
-.job-title{
+
+.job-title {
   color: white;
 }
-.bookmark-button{
+
+.bookmark-button {
   background-color: #1893d5;
-  padding: 10px 10px 10px 10px;
   border: none;
   border-radius: 5px;
   color: white;
   font-size: 12px;
   margin-left: 20px;
-  font-family: "Roboto";
 }
-.btn{
+
+.btn3 {
   margin-top: 20px;
-  font-size: 16px;
+  background-color: #1893d5;
+  padding: 7px;
+  border: none;
+  border-radius: 5px;
+  color: white;
+  font-size: 12px;
 }
-.details{
+
+.details {
   color: beige;
+}
+
+.swiper {
+  height: 70vh;
+  perspective: 1000px;
+  perspective-origin: center;
+  transform-style: preserve-3d;
+  position: relative;
+}
+
+.swipe-indicator {
+  position: absolute;
+  top: 87%;
+  left: 47%;
+  transform: translate(-50%, -50%);
+  background-color: rgba(0, 0, 0, 0.8);
+  color: white;
+  padding: 10px 20px;
+  font-size: 18px;
+  border-radius: 8px;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.bookmark-indicator {
+  background-color: #7FDB6A;
+  opacity: 1;
+}
+
+.dismiss-indicator {
+  background-color: #F44747;
+  opacity: 1;
+}
+
+.bookamrk-dismiss-action-conatiner {
+  display: flex;
+  justify-content: flex-end;
+  align-items: flex-end;
+}
+
+/* Media Queries */
+
+/* Mobile Devices (max-width 480px) */
+@media screen and (min-width: 480px) {
+  .job-card {
+    min-width: 337px; /* Fixed width for small screens */
+    height: 55vh;
+    padding: 8px;
+  }
+
+  .main-heading-jobs {
+    font-size: 22px;
+  }
+
+  .btn3, .bookmark-button {
+    font-size: 10px;
+    margin-left: 20px;
+  }
+
+  .swipe-indicator {
+    font-size: 16px;
+  }
+}
+
+@media screen and (min-width: 768px) and (max-width: 1024px) {
+  .job-card{
+    width: 724px;
+  }
+  .bookmark-button{
+    margin-left: 20px;
+  }
+}
+
+@media screen and (min-width:1368px) {
+  .job-card {
+    width: 98vw;
+    
+  }
+  .bookmark-button{
+    margin-left: 20px;
+  }
 }

@@ -48,7 +48,8 @@
   display: flex;
   flex-direction: column;
   gap: 20px;
-  margin-bottom: 60px; /* To prevent overlap with bottom navigation */
+  margin-bottom: 60px;
+  /* To prevent overlap with bottom navigation */
 }
 
 /* Job Card Styles */
