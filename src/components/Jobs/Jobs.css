@@ -20,9 +20,8 @@
   justify-content: center;
   flex-direction: column;
 }
-.bookmark-button.btn3:hover {
-  background-color: #003f91; /* Slightly darker blue for hover effect */
-}
+
+
 
 .job-card {
   height: 60vh;
@@ -129,8 +128,10 @@
   }
 
   .bookmark-button.btn3 {
-    background-color: #0050b3; /* Dark blue background */
-    color: #ffffff; /* White text */
+    background-color: #0050b3;
+    /* Dark blue background */
+    color: #ffffff;
+    /* White text */
     border: none;
     padding: 10px 20px;
     font-size: 16px;
@@ -195,4 +196,9 @@
   .job-card {
     height: 40vh;
   }
+}
+
+.bookmark-button.btn3:hover {
+  background-color: #003f91;
+  /* Slightly darker blue for hover effect */
 }
