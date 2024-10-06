@@ -2,7 +2,8 @@
     background-color: #1E1E1E;
     padding: 10px;
 }
-.bookmark-btn-container{
+
+.bookmark-btn-container {
     justify-content: space-between;
 }
 
@@ -61,4 +62,11 @@
     font-size: 20px;
 
 
+}
+
+@media screen and (min-width:1368px) {
+    .button {
+        padding: 10px 10px 10px 10px;
+        font-size: 16px;
+    }
 }

@@ -50,10 +50,10 @@ const Bookmarks = () => {
 
   return (
     <div className="bookmarks-container">
-     <div className='bookmark-btn-container'>
-     <button className="button button1" onClick={jobs}>Jobs</button>
-     <button className="button button1" onClick={Home}>Back To Home</button>
-     </div>
+      <div className='bookmark-btn-container'>
+        <button className="button button1" onClick={jobs}>Jobs</button>
+        <button className="button button1" onClick={Home}>Back To Home</button>
+      </div>
 
       {/* Conditionally render the heading if there are bookmarked jobs */}
       {bookmarkedJobs.length > 0 && <h1 className="bookmark-heading">Welcome To Bookmark</h1>}
